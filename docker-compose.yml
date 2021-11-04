@@ -1,0 +1,17 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    command: redis-server
+    ports:
+    - 6379:6379
+
+  server:
+    image: server
+    container_name: server
+    build: 
+      context: ./
+    ports:
+      - 9600:9600
+    depends_on:
+      - redis 
