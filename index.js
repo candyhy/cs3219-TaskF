@@ -20,6 +20,7 @@ app.delete("/delete_data", (req, res) => {
       status: "failure",
       message: "Missing dataType field"
     });
+    return;
   }
   const dataType = req.query.dataType;
   redisClient.get(dataType, (err, response) => {
@@ -37,6 +38,7 @@ app.delete("/delete_data", (req, res) => {
         status: "success",
         message: "Data type deletion successful"
       });
+      return;
     }
   });
 });
@@ -48,7 +50,6 @@ app.get("/get_email", (req, res) => {
     if (err) {
       console.log(err);
     }
-    console.log(response);
     if (response === null) {
       axios.get(
         "https://my.api.mockaroo.com/email.json?key=4394e770"
@@ -58,12 +59,14 @@ app.get("/get_email", (req, res) => {
               status: "failure",
               message: result.data
             });
+            return;
           } else {
             redisClient.set(dataType, JSON.stringify(result.data), redisClient.print);
             res.status(200).send({
               status: "success",
               message: result.data
             });
+            return;
           }
         });
     } else {
@@ -72,6 +75,7 @@ app.get("/get_email", (req, res) => {
           status: "redis read success",
           message: response
       });
+      return;
     }
   });
 });
